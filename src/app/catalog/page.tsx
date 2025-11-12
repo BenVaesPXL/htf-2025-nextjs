@@ -157,89 +157,98 @@ export default function CatalogPage() {
 
   return (
     <>
-      <div className="max-w-[1800px] mx-auto px-6 py-6">
-        <div className="bg-panel-background border border-panel-border rounded-lg shadow-[--shadow-cockpit-border] p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-bold text-text-primary mb-2">
-                Fish Species Catalog
-              </h1>
-              <p className="text-text-secondary text-sm font-mono">
-                USER: {session.user.email}
-              </p>
+      <div className="min-h-screen bg-background">
+        <div className="max-w-[1400px] mx-auto px-8 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-3xl font-semibold text-text-primary mb-1 tracking-tight">
+                  Species Catalog
+                </h1>
+                <p className="text-text-secondary text-sm">
+                  {session.user.email}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <Link
+                  href="/"
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium text-text-secondary border border-panel-border hover:border-primary-blue hover:text-primary-blue transition-all"
+                >
+                  ← Back to Map
+                </Link>
+                <button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium bg-primary-blue text-white hover:bg-primary-blue/90 shadow-[--shadow-glow] transition-all"
+                >
+                  + Add Species
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsAddModalOpen(true)}
-                className="border-2 border-sonar-green bg-sonar-green text-background shadow-[--shadow-cockpit-border] px-4 py-2 rounded hover:bg-sonar-green/80 transition-colors text-sm font-mono font-bold"
-              >
-                + ADD NEW FISH
-              </button>
-              <Link
-                href="/"
-                className="border border-panel-border shadow-[--shadow-cockpit-border] px-4 py-2 rounded hover:border-sonar-green hover:text-sonar-green transition-colors text-sm font-mono"
-              >
-                ← BACK TO MAP
-              </Link>
+
+            {/* Progress Bar */}
+            <div className="bg-panel-background rounded-2xl p-6 shadow-[--shadow-glow] mb-6">
+              <div className="flex items-center gap-6 mb-4">
+                <div className="text-sm">
+                  <span className="text-text-primary font-semibold">
+                    {seenCount}
+                  </span>
+                  <span className="text-text-secondary">
+                    {" "}
+                    / {fishes.length} spotted
+                  </span>
+                </div>
+                <div className="flex-1 bg-background rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-primary-blue h-full transition-all duration-500"
+                    style={{
+                      width: `${
+                        fishes.length > 0
+                          ? (seenCount / fishes.length) * 100
+                          : 0
+                      }%`,
+                    }}
+                  />
+                </div>
+                <div className="text-sm text-text-secondary font-medium">
+                  {fishes.length > 0
+                    ? Math.round((seenCount / fishes.length) * 100)
+                    : 0}
+                  %
+                </div>
+              </div>
+
+              <FishFilterButtons
+                activeFilter={filter}
+                onFilterChange={setFilter}
+                totalCount={fishes.length}
+                seenCount={seenCount}
+                unseenCount={unseenCount}
+              />
             </div>
+
+            {/* Fish Grid */}
+            {filteredFishes.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-lg text-text-secondary">
+                  {filter === "seen" && "No fish spotted yet"}
+                  {filter === "unseen" && "All fish spotted! 🎉"}
+                  {filter === "all" && "Loading..."}
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {filteredFishes.map((fish) => (
+                  <FishCatalogCard
+                    key={fish.id}
+                    fish={fish}
+                    userEmail={session.user.email}
+                    onFishUpdate={handleFishUpdate}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-
-          <div className="mb-4">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="text-sm font-mono">
-                <span className="text-sonar-green font-bold">{seenCount}</span>
-                <span className="text-text-secondary">
-                  {" "}
-                  / {fishes.length} SPOTTED
-                </span>
-              </div>
-              <div className="flex-1 bg-background rounded-full h-3 border border-panel-border overflow-hidden">
-                <div
-                  className="bg-sonar-green h-full transition-all duration-500"
-                  style={{
-                    width: `${
-                      fishes.length > 0 ? (seenCount / fishes.length) * 100 : 0
-                    }%`,
-                  }}
-                />
-              </div>
-              <div className="text-sm font-mono text-text-secondary">
-                {fishes.length > 0
-                  ? Math.round((seenCount / fishes.length) * 100)
-                  : 0}
-                %
-              </div>
-            </div>
-
-            <FishFilterButtons
-              activeFilter={filter}
-              onFilterChange={setFilter}
-              totalCount={fishes.length}
-              seenCount={seenCount}
-              unseenCount={unseenCount}
-            />
-          </div>
-
-          {filteredFishes.length === 0 ? (
-            <div className="text-center py-12 border border-panel-border rounded-lg bg-panel-background">
-              <p className="text-xl text-text-secondary font-mono">
-                {filter === "seen" && "NO FISH SPOTTED YET"}
-                {filter === "unseen" && "ALL FISH SPOTTED! 🎉"}
-                {filter === "all" && "LOADING..."}
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-8">
-              {filteredFishes.map((fish) => (
-                <FishCatalogCard
-                  key={fish.id}
-                  fish={fish}
-                  userEmail={session.user.email}
-                  onFishUpdate={handleFishUpdate}
-                />
-              ))}
-            </div>
-          )}
         </div>
       </div>
 

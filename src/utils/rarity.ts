@@ -24,12 +24,14 @@ export const getRarityColor = (rarity: string): string => {
 
 export const getRarityBadgeClass = (rarity: string): string => {
   switch (rarity.toUpperCase()) {
-    case "RARE":
-      return "bg-warning-amber text-deep-ocean";
     case "EPIC":
-      return "bg-danger-red text-deep-ocean";
+      return "bg-secondary-purple/10 text-secondary-purple ring-1 ring-secondary-purple/20";
+    case "RARE":
+      return "bg-warning-orange/10 text-warning-orange ring-1 ring-warning-orange/20";
+    case "COMMON":
+      return "bg-success-green/10 text-success-green ring-1 ring-success-green/20";
     default:
-      return "bg-sonar-green text-deep-ocean";
+      return "bg-primary-blue/10 text-primary-blue ring-1 ring-primary-blue/20";
   }
 };
 

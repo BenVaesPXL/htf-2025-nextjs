@@ -15,46 +15,36 @@ export default function FishTrackerLayout({
   sortedFishes,
 }: FishTrackerLayoutProps) {
   return (
-    <div className="w-full h-screen flex flex-col relative overflow-hidden">
-      {/* Scanline effect */}
-      <div className="fixed top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--color-sonar-green)_10%,transparent)] to-transparent animate-scanline pointer-events-none z-[9999]"></div>
-
-      {/* Header */}
-      <div className="bg-[color-mix(in_srgb,var(--color-dark-navy)_85%,transparent)] border-2 border-panel-border shadow-[--shadow-cockpit] backdrop-blur-[10px] px-6 py-3 border-b-2 border-panel-border flex items-center justify-between z-10">
-        <div className="flex items-center gap-4">
-          <div className="text-2xl font-bold [text-shadow:--shadow-glow-text] text-sonar-green">
-            FISH TRACKER
+    <div className="w-full h-screen flex flex-col relative bg-background">
+      {/* Floating Header - Minimal & Clean */}
+      <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between">
+        {/* Logo & Title */}
+        <div className="flex items-center gap-3 bg-panel-background backdrop-blur-xl rounded-2xl px-6 py-3 shadow-[--shadow-cockpit]">
+          <div className="w-2 h-2 rounded-full bg-primary-blue"></div>
+          <div className="text-xl font-semibold text-text-primary tracking-tight">
+            FishTracker
           </div>
-          <div className="text-xs text-text-secondary font-mono">
-            GLOBAL MARINE MONITORING SYSTEM
+          <div className="h-4 w-px bg-panel-border"></div>
+          <div className="text-sm text-text-secondary">
+            {fishes.length} species
           </div>
         </div>
-        <div className="flex items-center gap-4 text-xs font-mono">
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
           <Link
             href="/catalog"
-            className="border border-panel-border shadow-[--shadow-cockpit-border] px-3 py-1 rounded hover:border-sonar-green hover:text-sonar-green transition-colors"
+            className="bg-panel-background backdrop-blur-xl rounded-2xl px-5 py-3 shadow-[--shadow-cockpit] text-sm font-medium text-text-primary hover:bg-white hover:shadow-[--shadow-panel] transition-all"
           >
-            <span className="text-text-secondary hover:text-sonar-green">
-              CATALOG
-            </span>
+            View Catalog
           </Link>
-          <div className="border border-panel-border shadow-[--shadow-cockpit-border] px-3 py-1 rounded">
-            <span className="text-sonar-green">STATUS:</span>
-            <span className="text-sonar-green ml-2 font-bold">OPERATIONAL</span>
-          </div>
-          <div className="border border-panel-border shadow-[--shadow-cockpit-border] px-3 py-1 rounded">
-            <span className="text-text-secondary">TARGETS:</span>
-            <span className="text-sonar-green ml-2 font-bold">
-              {fishes.length}
-            </span>
-          </div>
-          <div className="border border-panel-border shadow-[--shadow-cockpit-border] px-3 py-1 rounded">
+          <div className="bg-panel-background backdrop-blur-xl rounded-2xl px-4 py-3 shadow-[--shadow-cockpit]">
             <UserInfo />
           </div>
         </div>
       </div>
 
-      {/* Map and Fish List with shared hover state */}
+      {/* Fullscreen Map with Floating Fish Cards */}
       <FishTrackerClient fishes={fishes} sortedFishes={sortedFishes} />
     </div>
   );
