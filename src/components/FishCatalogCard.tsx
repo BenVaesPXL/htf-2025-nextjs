@@ -63,6 +63,8 @@ export default function FishCatalogCard({
     longitude: number;
     depth: number;
     temperature: number;
+    photo?: string;
+    photoName?: string;
   }) => {
     // Save the sighting
     const storageKey = `userSightings_${userEmail}`;
@@ -109,7 +111,9 @@ export default function FishCatalogCard({
     }
 
     setIsModalOpen(false);
-    alert(`✓ Sighting recorded for ${fish.name}!`);
+
+    const photoMsg = sighting.photo ? " with photo evidence" : "";
+    alert(`✓ Sighting recorded for ${fish.name}${photoMsg}!`);
   };
 
   return (

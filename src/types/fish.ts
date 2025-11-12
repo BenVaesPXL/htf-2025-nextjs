@@ -18,6 +18,8 @@ export interface Sighting {
   depth: number;
   temperature: number;
   spottedBy?: string; // Who spotted it
+  photo?: string; // Base64 encoded photo
+  photoName?: string; // Original filename
 }
 
 export type Rarity = "COMMON" | "RARE" | "EPIC";

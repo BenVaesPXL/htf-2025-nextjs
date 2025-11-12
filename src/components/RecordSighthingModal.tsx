@@ -12,6 +12,8 @@ interface RecordSightingModalProps {
     longitude: number;
     depth: number;
     temperature: number;
+    photo?: string;
+    photoName?: string;
   }) => void;
 }
 
@@ -25,8 +27,9 @@ export default function RecordSightingModal({
   const [longitude, setLongitude] = useState("");
   const [depth, setDepth] = useState("");
   const [temperature, setTemperature] = useState("");
-  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [gettingLocation, setGettingLocation] = useState(false);
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [photoName, setPhotoName] = useState<string>("");
 
   if (!isOpen) return null;
 
@@ -49,6 +52,37 @@ export default function RecordSightingModal({
       alert("Geolocation is not supported by your browser");
       setGettingLocation(false);
     }
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!validTypes.includes(file.type)) {
+      alert("Please upload a valid image (JPEG, PNG, or WebP)");
+      return;
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size must be less than 5MB");
+      return;
+    }
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhoto(reader.result as string);
+      setPhotoName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemovePhoto = () => {
+    setPhoto(null);
+    setPhotoName("");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,6 +108,8 @@ export default function RecordSightingModal({
       longitude: lon,
       depth: dep,
       temperature: temp,
+      photo: photo || undefined,
+      photoName: photoName || undefined,
     });
 
     // Reset form
@@ -81,6 +117,8 @@ export default function RecordSightingModal({
     setLongitude("");
     setDepth("");
     setTemperature("");
+    setPhoto(null);
+    setPhotoName("");
   };
 
   return (
@@ -96,6 +134,60 @@ export default function RecordSightingModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {/* Photo Upload */}
+          <div>
+            <label className="block text-sm font-mono text-text-secondary mb-2">
+              PHOTO EVIDENCE (Optional)
+            </label>
+            {!photo ? (
+              <label className="w-full flex flex-col items-center px-4 py-6 bg-background border-2 border-dashed border-panel-border rounded cursor-pointer hover:border-sonar-green transition-colors">
+                <svg
+                  className="w-12 h-12 text-text-secondary mb-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <span className="text-sm text-text-secondary font-mono">
+                  CLICK TO UPLOAD IMAGE
+                </span>
+                <span className="text-xs text-text-secondary/50 font-mono mt-1">
+                  JPEG, PNG, WebP (Max 5MB)
+                </span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+              </label>
+            ) : (
+              <div className="relative">
+                <img
+                  src={photo}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded border border-panel-border"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemovePhoto}
+                  className="absolute top-2 right-2 bg-danger-red text-background rounded-full w-8 h-8 flex items-center justify-center hover:bg-danger-red/80 transition-colors font-bold"
+                >
+                  ✕
+                </button>
+                <div className="mt-2 text-xs text-text-secondary font-mono truncate">
+                  {photoName}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Current Location Button */}
           <button
             type="button"
