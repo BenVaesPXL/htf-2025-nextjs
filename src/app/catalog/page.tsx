@@ -46,7 +46,7 @@ export default function CatalogPage() {
     if (session?.user?.email) {
       loadFishes();
     }
-  }, [session?.user?.email]); // Removed refreshKey from dependencies!
+  }, [session?.user?.email]);
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -157,7 +157,7 @@ export default function CatalogPage() {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto p-8">
+      <div className="max-w-[1800px] mx-auto px-6 py-6">
         <div className="bg-panel-background border border-panel-border rounded-lg shadow-[--shadow-cockpit-border] p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -229,7 +229,7 @@ export default function CatalogPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-8">
               {filteredFishes.map((fish) => (
                 <FishCatalogCard
                   key={fish.id}
