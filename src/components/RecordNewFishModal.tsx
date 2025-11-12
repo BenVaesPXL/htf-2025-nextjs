@@ -134,12 +134,12 @@ export default function AddFishModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-panel-background border-2 border-sonar-green rounded-lg shadow-[--shadow-cockpit] max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-panel-background backdrop-blur-xl rounded-2xl shadow-[--shadow-panel] max-w-md w-full max-h-[90vh] overflow-y-auto border border-panel-border">
         {/* Header */}
-        <div className="bg-background border-b border-panel-border p-4 sticky top-0 z-10">
-          <h2 className="text-xl font-bold text-sonar-green font-mono">
-            ADD NEW FISH SPECIES
+        <div className="border-b border-panel-border px-6 py-5 sticky top-0 bg-panel-background backdrop-blur-xl z-10">
+          <h2 className="text-xl font-semibold text-text-primary">
+            Add New Species
           </h2>
           <p className="text-sm text-text-secondary mt-1">
             Register a new fish species in the catalog
@@ -147,31 +147,31 @@ export default function AddFishModal({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Fish Name */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              FISH NAME *
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Fish Name
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-panel-border rounded text-text-primary font-mono focus:border-sonar-green focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/50 backdrop-blur-sm border border-panel-border rounded-xl text-text-primary focus:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all"
               placeholder="e.g., Atlantic Bluefin Tuna"
             />
           </div>
 
           {/* Photo Upload (Optional) */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              FISH IMAGE (Optional)
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Fish Image <span className="text-text-secondary">(Optional)</span>
             </label>
             {!photo ? (
-              <label className="w-full flex flex-col items-center px-4 py-6 bg-background border-2 border-dashed border-panel-border rounded cursor-pointer hover:border-sonar-green transition-colors">
+              <label className="w-full flex flex-col items-center px-4 py-8 bg-linear-to-br from-primary-blue/5 to-accent-cyan/5 border-2 border-dashed border-panel-border rounded-xl cursor-pointer hover:border-primary-blue transition-colors">
                 <svg
-                  className="w-12 h-12 text-text-secondary mb-2"
+                  className="w-12 h-12 text-text-secondary mb-3"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -183,10 +183,10 @@ export default function AddFishModal({
                     d="M12 4v16m8-8H4"
                   />
                 </svg>
-                <span className="text-sm text-text-secondary font-mono">
-                  CLICK TO UPLOAD IMAGE
+                <span className="text-sm font-medium text-text-primary">
+                  Click to upload image
                 </span>
-                <span className="text-xs text-text-secondary/50 font-mono mt-1">
+                <span className="text-xs text-text-secondary mt-1">
                   JPEG, PNG, WebP (Max 5MB)
                 </span>
                 <input
@@ -201,16 +201,16 @@ export default function AddFishModal({
                 <img
                   src={photo}
                   alt="Fish preview"
-                  className="w-full h-48 object-cover rounded border border-panel-border"
+                  className="w-full h-48 object-cover rounded-xl border border-panel-border"
                 />
                 <button
                   type="button"
                   onClick={handleRemovePhoto}
-                  className="absolute top-2 right-2 bg-danger-red text-background rounded-full w-8 h-8 flex items-center justify-center hover:bg-danger-red/80 transition-colors font-bold"
+                  className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-text-primary rounded-full w-8 h-8 flex items-center justify-center hover:bg-white transition-colors shadow-sm"
                 >
                   ✕
                 </button>
-                <div className="mt-2 text-xs text-text-secondary font-mono truncate">
+                <div className="mt-2 text-xs text-text-secondary truncate">
                   {photoName}
                 </div>
               </div>
@@ -219,8 +219,8 @@ export default function AddFishModal({
 
           {/* Rarity */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              RARITY *
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Rarity
             </label>
             <div className="grid grid-cols-3 gap-2">
               {(["COMMON", "RARE", "EPIC"] as const).map((r) => (
@@ -228,14 +228,10 @@ export default function AddFishModal({
                   key={r}
                   type="button"
                   onClick={() => setRarity(r)}
-                  className={`py-2 px-4 rounded font-bold text-xs font-mono transition-all ${
+                  className={`py-2.5 px-4 rounded-xl font-medium text-sm transition-all ${
                     rarity === r
-                      ? r === "COMMON"
-                        ? "bg-sonar-green text-background border-2 border-sonar-green"
-                        : r === "RARE"
-                        ? "bg-warning-amber text-background border-2 border-warning-amber"
-                        : "bg-danger-red text-background border-2 border-danger-red"
-                      : "bg-background text-text-secondary border-2 border-panel-border hover:border-sonar-green"
+                      ? "bg-primary-blue text-white shadow-sm"
+                      : "bg-white/50 backdrop-blur-sm text-text-secondary border border-panel-border hover:border-primary-blue hover:text-primary-blue"
                   }`}
                 >
                   {r}
@@ -246,8 +242,8 @@ export default function AddFishModal({
 
           {/* Divider */}
           <div className="border-t border-panel-border pt-4">
-            <h3 className="text-sm font-mono text-sonar-green mb-3">
-              FIRST SIGHTING LOCATION
+            <h3 className="text-sm font-semibold text-text-primary mb-3">
+              First Sighting Location
             </h3>
 
             {/* Current Location Button */}
@@ -255,18 +251,18 @@ export default function AddFishModal({
               type="button"
               onClick={handleGetCurrentLocation}
               disabled={gettingLocation}
-              className="w-full py-2 px-4 rounded border-2 border-panel-border bg-background text-sonar-green hover:border-sonar-green transition-colors text-sm font-mono disabled:opacity-50 mb-4"
+              className="w-full py-2.5 px-4 rounded-xl border border-panel-border bg-white/50 backdrop-blur-sm text-text-primary hover:border-primary-blue hover:bg-white transition-colors text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2 mb-4"
             >
-              {gettingLocation
-                ? "GETTING LOCATION..."
-                : "📍 USE CURRENT LOCATION"}
+              <span>📍</span>
+              {gettingLocation ? "Getting location..." : "Use Current Location"}
             </button>
           </div>
 
           {/* Latitude */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              LATITUDE (-90 to 90) *
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Latitude{" "}
+              <span className="text-text-secondary text-xs">(-90 to 90)</span>
             </label>
             <input
               type="number"
@@ -274,15 +270,16 @@ export default function AddFishModal({
               value={latitude}
               onChange={(e) => setLatitude(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-panel-border rounded text-text-primary font-mono focus:border-sonar-green focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/50 backdrop-blur-sm border border-panel-border rounded-xl text-text-primary focus:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all"
               placeholder="e.g., 51.2194"
             />
           </div>
 
           {/* Longitude */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              LONGITUDE (-180 to 180) *
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Longitude{" "}
+              <span className="text-text-secondary text-xs">(-180 to 180)</span>
             </label>
             <input
               type="number"
@@ -290,15 +287,16 @@ export default function AddFishModal({
               value={longitude}
               onChange={(e) => setLongitude(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-panel-border rounded text-text-primary font-mono focus:border-sonar-green focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/50 backdrop-blur-sm border border-panel-border rounded-xl text-text-primary focus:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all"
               placeholder="e.g., 5.3931"
             />
           </div>
 
           {/* Depth */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              DEPTH (meters) *
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Depth{" "}
+              <span className="text-text-secondary text-xs">(meters)</span>
             </label>
             <input
               type="number"
@@ -306,15 +304,16 @@ export default function AddFishModal({
               value={depth}
               onChange={(e) => setDepth(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-panel-border rounded text-text-primary font-mono focus:border-sonar-green focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/50 backdrop-blur-sm border border-panel-border rounded-xl text-text-primary focus:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all"
               placeholder="e.g., 25.5"
             />
           </div>
 
           {/* Temperature */}
           <div>
-            <label className="block text-sm font-mono text-text-secondary mb-2">
-              TEMPERATURE (°C) *
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Temperature{" "}
+              <span className="text-text-secondary text-xs">(°C)</span>
             </label>
             <input
               type="number"
@@ -322,25 +321,25 @@ export default function AddFishModal({
               value={temperature}
               onChange={(e) => setTemperature(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-panel-border rounded text-text-primary font-mono focus:border-sonar-green focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/50 backdrop-blur-sm border border-panel-border rounded-xl text-text-primary focus:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all"
               placeholder="e.g., 18.5"
             />
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2 px-4 rounded border-2 border-panel-border bg-background text-text-secondary hover:border-danger-red hover:text-danger-red transition-colors text-sm font-mono"
+              className="flex-1 py-2.5 px-4 rounded-xl border border-panel-border bg-white/50 backdrop-blur-sm text-text-secondary hover:border-text-secondary hover:text-text-primary transition-all text-sm font-medium"
             >
-              CANCEL
+              Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2 px-4 rounded border-2 border-sonar-green bg-sonar-green text-background hover:bg-sonar-green/80 transition-colors text-sm font-mono font-bold"
+              className="flex-1 py-2.5 px-4 rounded-xl bg-primary-blue text-white hover:bg-primary-blue/90 transition-all text-sm font-medium shadow-sm"
             >
-              ADD FISH
+              Add Fish
             </button>
           </div>
         </form>
