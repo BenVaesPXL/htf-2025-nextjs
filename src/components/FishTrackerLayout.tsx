@@ -34,7 +34,7 @@ export default function FishTrackerLayout({
         <div className="flex items-center gap-3">
           <Link
             href="/catalog"
-            className="bg-panel-background backdrop-blur-xl rounded-2xl px-5 py-3 shadow-[--shadow-cockpit] text-sm font-medium text-text-primary hover:bg-white hover:shadow-[--shadow-panel] transition-all"
+            className="bg-panel-background backdrop-blur-xl rounded-2xl px-3 py-3 shadow-[--shadow-cockpit] text-m font-medium text-text-primary hover:bg-primary-blue hover:text-white hover:shadow-[--shadow-panel] transition-all"
           >
             View Catalog
           </Link>
