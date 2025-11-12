@@ -34,7 +34,7 @@ export default function FishDetail({ fish }: FishDetailProps) {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to catalog
+          Back to map
         </button>
 
         {/* Main Card */}
@@ -78,11 +78,11 @@ export default function FishDetail({ fish }: FishDetailProps) {
               {/* Details */}
               <div className="lg:w-1/2 space-y-6">
                 {/* Latest Sighting */}
-                {latestSighting && (
-                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-5 border border-panel-border">
-                    <h2 className="text-lg font-semibold text-text-primary mb-4">
-                      Latest Sighting
-                    </h2>
+                <div className="bg-white/50 backdrop-blur-sm rounded-xl p-5 border border-panel-border">
+                  <h2 className="text-lg font-semibold text-text-primary mb-4">
+                    Latest Sighting
+                  </h2>
+                  {latestSighting ? (
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center gap-3">
                         <svg
@@ -157,8 +157,27 @@ export default function FishDetail({ fish }: FishDetailProps) {
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="text-center py-8">
+                      <svg
+                        className="w-12 h-12 text-text-secondary mx-auto mb-3 opacity-50"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                        />
+                      </svg>
+                      <p className="text-sm text-text-secondary">
+                        No sighting data available yet
+                      </p>
+                    </div>
+                  )}
+                </div>
 
                 {/* Description */}
                 <div className="bg-white/50 backdrop-blur-sm rounded-xl p-5 border border-panel-border">
