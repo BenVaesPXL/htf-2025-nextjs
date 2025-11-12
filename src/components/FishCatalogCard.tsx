@@ -10,11 +10,13 @@ import RecordSightingModal from "./RecordSighthingModal";
 interface FishCatalogCardProps {
   fish: Fish;
   userEmail: string;
+  onFishUpdate?: (updatedFish: Fish) => void;
 }
 
 export default function FishCatalogCard({
   fish,
   userEmail,
+  onFishUpdate,
 }: FishCatalogCardProps) {
   const [isSeen, setIsSeen] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -62,6 +64,7 @@ export default function FishCatalogCard({
     depth: number;
     temperature: number;
   }) => {
+    // Save the sighting
     const storageKey = `userSightings_${userEmail}`;
     const stored = localStorage.getItem(storageKey);
     const sightings = stored ? JSON.parse(stored) : [];
@@ -77,6 +80,33 @@ export default function FishCatalogCard({
 
     sightings.push(newSighting);
     localStorage.setItem(storageKey, JSON.stringify(sightings));
+
+    // Create updated fish with new sighting
+    const updatedFish: Fish = {
+      ...fish,
+      latestSighting: {
+        latitude: sighting.latitude,
+        longitude: sighting.longitude,
+        timestamp: newSighting.timestamp,
+      },
+    };
+
+    // Update in localStorage for custom fish
+    const customFishKey = `customFish_${userEmail}`;
+    const customStored = localStorage.getItem(customFishKey);
+    if (customStored) {
+      const customFish = JSON.parse(customStored);
+      const fishIndex = customFish.findIndex((f: Fish) => f.id === fish.id);
+      if (fishIndex !== -1) {
+        customFish[fishIndex] = updatedFish;
+        localStorage.setItem(customFishKey, JSON.stringify(customFish));
+      }
+    }
+
+    // Call parent callback to update state
+    if (onFishUpdate) {
+      onFishUpdate(updatedFish);
+    }
 
     setIsModalOpen(false);
     alert(`✓ Sighting recorded for ${fish.name}!`);
@@ -137,6 +167,7 @@ export default function FishCatalogCard({
             </div>
 
             <div
+              key={fish.latestSighting.timestamp}
               className={`text-xs font-mono space-y-1 mb-3 flex-grow ${
                 !isSeen ? "text-text-secondary/50" : "text-text-secondary"
               }`}
@@ -166,7 +197,7 @@ export default function FishCatalogCard({
                 onClick={handleOpenModal}
                 className="w-full py-2 px-4 rounded font-bold text-xs font-mono transition-all duration-300 bg-background text-warning-amber border-2 border-warning-amber hover:bg-warning-amber hover:text-background"
               >
-                RECORD SIGHTING
+                📝 RECORD SIGHTING
               </button>
 
               <button
