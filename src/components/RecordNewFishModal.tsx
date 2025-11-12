@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Fish } from "@/types/fish";
 
-interface RecordSightingModalProps {
-  fish: Fish;
+interface AddFishModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (sighting: {
+  onSubmit: (fish: {
+    name: string;
+    image: string;
+    rarity: string;
     latitude: number;
     longitude: number;
     depth: number;
@@ -17,12 +18,13 @@ interface RecordSightingModalProps {
   }) => void;
 }
 
-export default function RecordSightingModal({
-  fish,
+export default function AddFishModal({
   isOpen,
   onClose,
   onSubmit,
-}: RecordSightingModalProps) {
+}: AddFishModalProps) {
+  const [name, setName] = useState("");
+  const [rarity, setRarity] = useState<"COMMON" | "RARE" | "EPIC">("COMMON");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [depth, setDepth] = useState("");
@@ -88,13 +90,18 @@ export default function RecordSightingModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!name.trim()) {
+      alert("Please enter a fish name");
+      return;
+    }
+
     const lat = parseFloat(latitude);
     const lon = parseFloat(longitude);
     const dep = parseFloat(depth);
     const temp = parseFloat(temperature);
 
     if (isNaN(lat) || isNaN(lon) || isNaN(dep) || isNaN(temp)) {
-      alert("Please fill in all fields with valid numbers");
+      alert("Please fill in all location fields with valid numbers");
       return;
     }
 
@@ -104,6 +111,9 @@ export default function RecordSightingModal({
     }
 
     onSubmit({
+      name: name.trim(),
+      image: photo || "https://via.placeholder.com/400x300?text=No+Image",
+      rarity,
       latitude: lat,
       longitude: lon,
       depth: dep,
@@ -113,6 +123,8 @@ export default function RecordSightingModal({
     });
 
     // Reset form
+    setName("");
+    setRarity("COMMON");
     setLatitude("");
     setLongitude("");
     setDepth("");
@@ -125,19 +137,36 @@ export default function RecordSightingModal({
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-panel-background border-2 border-sonar-green rounded-lg shadow-[--shadow-cockpit] max-w-md w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="bg-background border-b border-panel-border p-4 sticky top-0">
+        <div className="bg-background border-b border-panel-border p-4 sticky top-0 z-10">
           <h2 className="text-xl font-bold text-sonar-green font-mono">
-            RECORD SIGHTING
+            ADD NEW FISH SPECIES
           </h2>
-          <p className="text-sm text-text-secondary mt-1">{fish.name}</p>
+          <p className="text-sm text-text-secondary mt-1">
+            Register a new fish species in the catalog
+          </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* Photo Upload */}
+          {/* Fish Name */}
           <div>
             <label className="block text-sm font-mono text-text-secondary mb-2">
-              PHOTO EVIDENCE (Optional)
+              FISH NAME *
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-background border border-panel-border rounded text-text-primary font-mono focus:border-sonar-green focus:outline-none"
+              placeholder="e.g., Atlantic Bluefin Tuna"
+            />
+          </div>
+
+          {/* Photo Upload (Optional) */}
+          <div>
+            <label className="block text-sm font-mono text-text-secondary mb-2">
+              FISH IMAGE (Optional)
             </label>
             {!photo ? (
               <label className="w-full flex flex-col items-center px-4 py-6 bg-background border-2 border-dashed border-panel-border rounded cursor-pointer hover:border-sonar-green transition-colors">
@@ -171,7 +200,7 @@ export default function RecordSightingModal({
               <div className="relative">
                 <img
                   src={photo}
-                  alt="Preview"
+                  alt="Fish preview"
                   className="w-full h-48 object-cover rounded border border-panel-border"
                 />
                 <button
@@ -188,22 +217,56 @@ export default function RecordSightingModal({
             )}
           </div>
 
-          {/* Current Location Button */}
-          <button
-            type="button"
-            onClick={handleGetCurrentLocation}
-            disabled={gettingLocation}
-            className="w-full py-2 px-4 rounded border-2 border-panel-border bg-background text-sonar-green hover:border-sonar-green transition-colors text-sm font-mono disabled:opacity-50"
-          >
-            {gettingLocation
-              ? "GETTING LOCATION..."
-              : "📍 USE CURRENT LOCATION"}
-          </button>
+          {/* Rarity */}
+          <div>
+            <label className="block text-sm font-mono text-text-secondary mb-2">
+              RARITY *
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {(["COMMON", "RARE", "EPIC"] as const).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setRarity(r)}
+                  className={`py-2 px-4 rounded font-bold text-xs font-mono transition-all ${
+                    rarity === r
+                      ? r === "COMMON"
+                        ? "bg-sonar-green text-background border-2 border-sonar-green"
+                        : r === "RARE"
+                        ? "bg-warning-amber text-background border-2 border-warning-amber"
+                        : "bg-danger-red text-background border-2 border-danger-red"
+                      : "bg-background text-text-secondary border-2 border-panel-border hover:border-sonar-green"
+                  }`}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-panel-border pt-4">
+            <h3 className="text-sm font-mono text-sonar-green mb-3">
+              FIRST SIGHTING LOCATION
+            </h3>
+
+            {/* Current Location Button */}
+            <button
+              type="button"
+              onClick={handleGetCurrentLocation}
+              disabled={gettingLocation}
+              className="w-full py-2 px-4 rounded border-2 border-panel-border bg-background text-sonar-green hover:border-sonar-green transition-colors text-sm font-mono disabled:opacity-50 mb-4"
+            >
+              {gettingLocation
+                ? "GETTING LOCATION..."
+                : "📍 USE CURRENT LOCATION"}
+            </button>
+          </div>
 
           {/* Latitude */}
           <div>
             <label className="block text-sm font-mono text-text-secondary mb-2">
-              LATITUDE (-90 to 90)
+              LATITUDE (-90 to 90) *
             </label>
             <input
               type="number"
@@ -219,7 +282,7 @@ export default function RecordSightingModal({
           {/* Longitude */}
           <div>
             <label className="block text-sm font-mono text-text-secondary mb-2">
-              LONGITUDE (-180 to 180)
+              LONGITUDE (-180 to 180) *
             </label>
             <input
               type="number"
@@ -235,7 +298,7 @@ export default function RecordSightingModal({
           {/* Depth */}
           <div>
             <label className="block text-sm font-mono text-text-secondary mb-2">
-              DEPTH (meters)
+              DEPTH (meters) *
             </label>
             <input
               type="number"
@@ -251,7 +314,7 @@ export default function RecordSightingModal({
           {/* Temperature */}
           <div>
             <label className="block text-sm font-mono text-text-secondary mb-2">
-              TEMPERATURE (°C)
+              TEMPERATURE (°C) *
             </label>
             <input
               type="number"
@@ -277,7 +340,7 @@ export default function RecordSightingModal({
               type="submit"
               className="flex-1 py-2 px-4 rounded border-2 border-sonar-green bg-sonar-green text-background hover:bg-sonar-green/80 transition-colors text-sm font-mono font-bold"
             >
-              RECORD SIGHTING
+              ADD FISH
             </button>
           </div>
         </form>
