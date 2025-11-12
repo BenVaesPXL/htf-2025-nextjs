@@ -61,14 +61,6 @@ export default function MapComponent({
           />
         ))}
       </Map>
-
-      {/* Coordinate display overlay */}
-      <div className="absolute top-4 left-4 bg-[color-mix(in_srgb,var(--color-dark-navy)_85%,transparent)] border-2 border-panel-border shadow-[--shadow-cockpit] backdrop-blur-[10px] px-4 py-2 rounded text-xs font-mono">
-        <div className="text-sonar-green font-bold mb-1">SONAR TRACKING</div>
-        <div className="text-text-secondary">
-          Active Targets: {fishes.length}
-        </div>
-      </div>
     </div>
   );
 }
