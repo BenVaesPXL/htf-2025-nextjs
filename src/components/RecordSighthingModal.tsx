@@ -122,14 +122,14 @@ export default function RecordSightingModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-panel-background border-2 border-sonar-green rounded-lg shadow-[--shadow-cockpit] max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-panel-background rounded-2xl shadow-[--shadow-panel] max-w-md w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="bg-background border-b border-panel-border p-4 sticky top-0">
-          <h2 className="text-xl font-bold text-sonar-green font-mono">
-            RECORD SIGHTING
+        <div className="border-b border-panel-border px-6 py-5 sticky top-0 bg-panel-background">
+          <h2 className="text-xl font-semibold text-text-primary">
+            Record Sighting
           </h2>
-          <p className="text-sm text-text-secondary mt-1">{fish.name}</p>
+          <p className="text-sm text-text-secondary mt-0.5">{fish.name}</p>
         </div>
 
         {/* Form */}

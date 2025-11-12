@@ -18,24 +18,24 @@ export default function FishFilterButtons({
   unseenCount,
 }: FishFilterButtonsProps) {
   const filters = [
-    { type: "all" as FilterType, label: "ALL FISH", count: totalCount },
-    { type: "seen" as FilterType, label: "SPOTTED", count: seenCount },
-    { type: "unseen" as FilterType, label: "NOT SPOTTED", count: unseenCount },
+    { type: "all" as FilterType, label: "All Species", count: totalCount },
+    { type: "seen" as FilterType, label: "Spotted", count: seenCount },
+    { type: "unseen" as FilterType, label: "Not Spotted", count: unseenCount },
   ];
 
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="inline-flex gap-1 bg-background rounded-xl p-1">
       {filters.map(({ type, label, count }) => (
         <button
           key={type}
           onClick={() => onFilterChange(type)}
-          className={`px-4 py-2 rounded font-bold text-xs font-mono transition-all duration-300 ${
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
             activeFilter === type
-              ? "bg-sonar-green text-background border-2 border-sonar-green"
-              : "bg-background text-text-secondary hover:text-sonar-green border-2 border-panel-border hover:border-sonar-green"
+              ? "bg-primary-blue text-white shadow-[--shadow-glow]"
+              : "text-text-secondary hover:text-text-primary"
           }`}
         >
-          {label} <span className="ml-1 opacity-75">({count})</span>
+          {label} <span className="opacity-60">({count})</span>
         </button>
       ))}
     </div>
