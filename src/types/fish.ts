@@ -10,4 +10,14 @@ export interface Fish {
   };
 }
 
+export interface Sighting {
+  id: string;
+  timestamp: string;
+  latitude: number;
+  longitude: number;
+  depth: number;
+  temperature: number;
+  spottedBy?: string; // Who spotted it
+}
+
 export type Rarity = "COMMON" | "RARE" | "EPIC";
