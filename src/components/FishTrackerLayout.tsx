@@ -3,13 +3,17 @@
 import { UserInfo } from "./AuthProvider";
 import FishTrackerClient from "./FishTrackerClient";
 import { Fish } from "@/types/fish";
+import Link from "next/link";
 
 interface FishTrackerLayoutProps {
   fishes: Fish[];
   sortedFishes: Fish[];
 }
 
-export default function FishTrackerLayout({ fishes, sortedFishes }: FishTrackerLayoutProps) {
+export default function FishTrackerLayout({
+  fishes,
+  sortedFishes,
+}: FishTrackerLayoutProps) {
   return (
     <div className="w-full h-screen flex flex-col relative overflow-hidden">
       {/* Scanline effect */}
@@ -26,6 +30,14 @@ export default function FishTrackerLayout({ fishes, sortedFishes }: FishTrackerL
           </div>
         </div>
         <div className="flex items-center gap-4 text-xs font-mono">
+          <Link
+            href="/catalog"
+            className="border border-panel-border shadow-[--shadow-cockpit-border] px-3 py-1 rounded hover:border-sonar-green hover:text-sonar-green transition-colors"
+          >
+            <span className="text-text-secondary hover:text-sonar-green">
+              CATALOG
+            </span>
+          </Link>
           <div className="border border-panel-border shadow-[--shadow-cockpit-border] px-3 py-1 rounded">
             <span className="text-sonar-green">STATUS:</span>
             <span className="text-sonar-green ml-2 font-bold">OPERATIONAL</span>
