@@ -8,6 +8,7 @@ export interface Fish {
     longitude: number;
     timestamp: string;
   };
+  description?: string;
 }
 
 export interface Sighting {
@@ -17,9 +18,7 @@ export interface Sighting {
   longitude: number;
   depth: number;
   temperature: number;
-  spottedBy?: string; // Who spotted it
-  photo?: string; // Base64 encoded photo
-  photoName?: string; // Original filename
+  spottedBy?: string;
 }
 
 export type Rarity = "COMMON" | "RARE" | "EPIC";
